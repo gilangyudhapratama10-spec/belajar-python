@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Interaktif Pembelajaran Python</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 200, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid #00c8ff;
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #00c8ff;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            background: rgba(40, 40, 70, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #00c8ff;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(50, 50, 90, 0.6);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .topic-item:hover {
+            background: rgba(70, 70, 120, 0.8);
+            transform: translateX(5px);
+        }
+
+        .topic-item.active {
+            background: rgba(0, 200, 255, 0.2);
+            border-color: #00c8ff;
+            box-shadow: 0 0 10px rgba(0, 200, 255, 0.3);
+        }
+
+        .main-content {
+            background: rgba(40, 40, 70, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #00c8ff;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+        }
+
+        .topic-title {
+            font-size: 2rem;
+            color: #00c8ff;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #00c8ff;
+        }
+
+        .topic-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            background: rgba(30, 30, 50, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00c8ff;
+        }
+
+        .code-container {
+            background: #1e1e2e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 1px solid #00c8ff;
+        }
+
+        .code-header {
+            background: #2d2d4d;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #00c8ff;
+        }
+
+        .code-title {
+            font-weight: bold;
+            color: #00c8ff;
+        }
+
+        .copy-btn {
+            background: #00c8ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #00a8df;
+            transform: scale(1.05);
+        }
+
+        .code-block {
+            padding: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #e6e6e6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .output-container {
+            background: #1e1e2e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 1px solid #00c8ff;
+            display: none;
+        }
+
+        .output-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .output-header {
+            background: #2d2d4d;
+            padding: 10px 15px;
+            color: #00c8ff;
+            font-weight: bold;
+            border-bottom: 1px solid #00c8ff;
+        }
+
+        .output-block {
+            padding: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            color: #00ffaa;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #00c8ff;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #00c8ff 0%, #00a8df 100%);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 200, 255, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 200, 255, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .toggle-output {
+            background: linear-gradient(135deg, #ff00aa 0%, #cc0088 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 170, 0.3);
+        }
+
+        .toggle-output:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 170, 0.4);
+        }
+
+        .topic-indicator {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #00c8ff;
+            margin-top: 10px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: rgba(0, 200, 255, 0.1);
+            color: #e6e6e6;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 15px;
+            border: 1px solid #00c8ff;
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+
+        footer p:first-child {
+            font-weight: bold;
+            color: #00c8ff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #ff79c6; }
+        .string { color: #f1fa8c; }
+        .number { color: #bd93f9; }
+        .comment { color: #6272a4; font-style: italic; }
+        .function { color: #50fa7b; }
+        .operator { color: #ff5555; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .topic-title {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-btn, .toggle-output {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Media Interaktif Pembelajaran Python</h1>
+            <p class="subtitle">Belajar Python Dasar dengan Contoh Interaktif</p>
+        </header>
+
+        <div class="content">
+            <aside class="sidebar">
+                <h2>Daftar Materi</h2>
+                <ul class="topic-list" id="topicList">
+                    <!-- Topic items will be generated by JavaScript -->
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <h2 class="topic-title" id="topicTitle">Variabel</h2>
+                
+                <div class="topic-description" id="topicDescription">
+                    Variabel adalah tempat untuk menyimpan data. Di Python, kita tidak perlu mendeklarasikan tipe data variabel secara eksplisit. Python akan secara otomatis mengenali tipe data berdasarkan nilai yang diberikan.
+                </div>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-title">Contoh Kode</span>
+                        <button class="copy-btn" onclick="copyCode()">Salin Kode</button>
+                    </div>
+                    <pre class="code-block" id="codeBlock"><code class="python">
+# Kode akan muncul di sini
+                    </code></pre>
+                </div>
+
+                <div class="output-container" id="outputContainer">
+                    <div class="output-header">Output</div>
+                    <pre class="output-block" id="outputBlock">
+# Output akan muncul di sini
+                    </pre>
+                </div>
+
+                <div class="controls">
+                    <button class="nav-btn" id="prevBtn" onclick="prevTopic()">◀ Sebelumnya</button>
+                    
+                    <button class="toggle-output" id="toggleOutput" onclick="toggleOutput()">
+                        Tampilkan Output
+                    </button>
+                    
+                    <button class="nav-btn" id="nextBtn" onclick="nextTopic()">Selanjutnya ▶</button>
+                </div>
+
+                <div class="topic-indicator" id="topicIndicator">
+                    Topik 1 dari 5
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <p>Media Pembelajaran Interaktif Python - Variabel, Tipe Data, Operator, Percabangan dan Perulangan</p>
+        <p>© 2024 - Dibuat untuk tujuan edukasi</p>
+    </footer>
+
+    <script>
+        // Data materi pembelajaran
+        const topics = [
+            {
+                title: "Variabel",
+                description: "Variabel adalah tempat untuk menyimpan data. Di Python, kita tidak perlu mendeklarasikan tipe data variabel secara eksplisit. Python akan secara otomatis mengenali tipe data berdasarkan nilai yang diberikan.",
+                code: `# Mendeklarasikan variabel
+nama = "John"
+umur = 25
+tinggi = 175.5
+mahasiswa = True
+
+# Menampilkan nilai variabel
+print(nama)
+print(umur)
+print(tinggi)
+print(mahasiswa)
+
+# Mengubah nilai variabel
+umur = 26
+print("Umur sekarang:", umur)
+
+# Multiple assignment
+x, y, z = 10, 20, 30
+print(x, y, z)`,
+                output: "John\n25\n175.5\nTrue\nUmur sekarang: 26\n10 20 30"
+            },
+            {
+                title: "Tipe Data",
+                description: "Python memiliki beberapa tipe data bawaan yang penting untuk dipahami. Setiap tipe data memiliki karakteristik dan kegunaan yang berbeda-beda.",
+                code: `# Integer (bilangan bulat)
+angka = 10
+print("Integer:", angka, type(angka))
+
+# Float (bilangan desimal)
+desimal = 3.14
+print("Float:", desimal, type(desimal))
+
+# String (teks)
+teks = "Hello Python"
+print("String:", teks, type(teks))
+
+# Boolean (True/False)
+benar = True
+salah = False
+print("Boolean:", benar, type(benar))
+
+# List (mutable, ordered)
+list_buah = ["apel", "jeruk", "mangga"]
+print("List:", list_buah, type(list_buah))
+
+# Tuple (immutable, ordered)
+tuple_warna = ("merah", "hijau", "biru")
+print("Tuple:", tuple_warna, type(tuple_warna))
+
+# Dictionary (key-value pairs)
+dict_mahasiswa = {
+    "nama": "Andi",
+    "umur": 20,
+    "prodi": "Informatika"
+}
+print("Dictionary:", dict_mahasiswa, type(dict_mahasiswa))
+
+# Set (unik, unordered)
+set_angka = {1, 2, 3, 2, 1}
+print("Set:", set_angka, type(set_angka))`,
+                output: "Integer: 10 <class 'int'>\nFloat: 3.14 <class 'float'>\nString: Hello Python <class 'str'>\nBoolean: True <class 'bool'>\nList: ['apel', 'jeruk', 'mangga'] <class 'list'>\nTuple: ('merah', 'hijau', 'biru') <class 'tuple'>\nDictionary: {'nama': 'Andi', 'umur': 20, 'prodi': 'Informatika'} <class 'dict'>\nSet: {1, 2, 3} <class 'set'>"
+            },
+            {
+                title: "Operator",
+                description: "Python memiliki berbagai jenis operator untuk melakukan operasi pada variabel dan nilai. Operator dibagi menjadi beberapa kategori berdasarkan fungsinya.",
+                code: `# Operator Aritmatika
+a = 10
+b = 3
+
+print("Penjumlahan:", a + b)
+print("Pengurangan:", a - b)
+print("Perkalian:", a * b)
+print("Pembagian:", a / b)
+print("Pembagian Bulat:", a // b)
+print("Modulus:", a % b)
+print("Eksponen:", a ** b)
+
+# Operator Perbandingan
+print("Sama dengan:", a == b)
+print("Tidak sama dengan:", a != b)
+print("Lebih besar:", a > b)
+print("Lebih kecil:", a < b)
+print("Lebih besar atau sama:", a >= b)
+print("Lebih kecil atau sama:", a <= b)
+
+# Operator Logika
+x = True
+y = False
+print("AND:", x and y)
+print("OR:", x or y)
+print("NOT:", not x)
+
+# Operator Penugasan
+c = 5
+c += 3  # Sama dengan c = c + 3
+print("Penugasan +=:", c)
+
+# Operator Keanggotaan
+list_angka = [1, 2, 3, 4, 5]
+print("Anggota list:", 3 in list_angka)
+print("Bukan anggota:", 6 not in list_angka)`,
+                output: "Penjumlahan: 13\nPengurangan: 7\nPerkalian: 30\nPembagian: 3.3333333333333335\nPembagian Bulat: 3\nModulus: 1\nEksponen: 1000\nSama dengan: False\nTidak sama dengan: True\nLebih besar: True\nLebih kecil: False\nLebih besar atau sama: True\nLebih kecil atau sama: False\nAND: False\nOR: True\nNOT: False\nPenugasan +=: 8\nAnggota list: True\nBukan anggota: True"
+            },
+            {
+                title: "Percabangan",
+                description: "Percabangan digunakan untuk mengeksekusi blok kode tertentu berdasarkan kondisi yang diberikan. Python menggunakan if, elif, dan else untuk percabangan.",
+                code: `# Percabangan if-elif-else
+nilai = 85
+
+if nilai >= 90:
+    print("Nilai: A")
+    print("Excellent!")
+elif nilai >= 80:
+    print("Nilai: B")
+    print("Good job!")
+elif nilai >= 70:
+    print("Nilai: C")
+    print("Not bad!")
+elif nilai >= 60:
+    print("Nilai: D")
+    print("You need to improve!")
+else:
+    print("Nilai: E")
+    print("Sorry, you failed!")
+
+# Percabangan bersarang
+jenis_kelamin = "P"
+if nilai >= 75:
+    if jenis_kelamin == "L":
+        print("Lulus, cowo keren!")
+    else:
+        print("Lulus, cewe cantik!")
+else:
+    print("Coba lagi ya!")
+
+# Percabangan dengan operator logika
+usia = 17
+punya_ktp = True
+
+if usia >= 17 and punya_ktp:
+    print("Boleh memilih dalam pemilu")
+else:
+    print("Tidak boleh memilih")
+
+# Short hand if
+status = "Lulus" if nilai >= 70 else "Tidak Lulus"
+print("Status:", status)`,
+                output: "Nilai: B\nGood job!\nLulus, cewe cantik!\nBoleh memilih dalam pemilu\nStatus: Lulus"
+            },
+            {
+                title: "Perulangan",
+                description: "Perulangan digunakan untuk mengeksekusi blok kode berulang kali. Python memiliki for loop dan while loop untuk melakukan perulangan.",
+                code: `# Perulangan for dengan range
+print("Perulangan for dengan range:")
+for i in range(5):
+    print(f"Iterasi ke-{i}")
+
+# Perulangan for dengan list
+print("\\nPerulangan for dengan list:")
+buah = ["apel", "jeruk", "mangga", "pisang"]
+for b in buah:
+    print(f"Saya suka {b}")
+
+# Perulangan for dengan enumerate
+print("\\nPerulangan for dengan enumerate:")
+for index, b in enumerate(buah):
+    print(f"Buah ke-{index}: {b}")
+
+# Perulangan while
+print("\\nPerulangan while:")
+counter = 0
+while counter < 3:
+    print(f"Counter: {counter}")
+    counter += 1
+
+# Perulangan dengan break dan continue
+print("\\nPerulangan dengan break dan continue:")
+for i in range(10):
+    if i == 2:
+        continue  # Lewati iterasi ini
+    if i == 7:
+        break     # Hentikan perulangan
+    print(i)
+
+# Perulangan nested
+print("\\nPerulangan nested:")
+for i in range(3):
+    for j in range(2):
+        print(f"i={i}, j={j}")`,
+                output: "Perulangan for dengan range:\nIterasi ke-0\nIterasi ke-1\nIterasi ke-2\nIterasi ke-3\nIterasi ke-4\n\nPerulangan for dengan list:\nSaya suka apel\nSaya suka jeruk\nSaya suka mangga\nSaya suka pisang\n\nPerulangan for dengan enumerate:\nBuah ke-0: apel\nBuah ke-1: jeruk\nBuah ke-2: mangga\nBuah ke-3: pisang\n\nPerulangan while:\nCounter: 0\nCounter: 1\nCounter: 2\n\nPerulangan dengan break dan continue:\n0\n1\n3\n4\n5\n6\n\nPerulangan nested:\ni=0, j=0\ni=0, j=1\ni=1, j=0\ni=1, j=1\ni=2, j=0\ni=2, j=1"
+            }
+        ];
+
+        let currentTopic = 0;
+        let showOutput = false;
+
+        // Inisialisasi aplikasi
+        function init() {
+            renderTopicList();
+            loadTopic(currentTopic);
+            updateNavigation();
+        }
+
+        // Render daftar topik
+        function renderTopicList() {
+            const topicList = document.getElementById('topicList');
+            topicList.innerHTML = '';
+            
+            topics.forEach((topic, index) => {
+                const li = document.createElement('li');
+                li.className = `topic-item ${index === currentTopic ? 'active' : ''}`;
+                li.textContent = `${index + 1}. ${topic.title}`;
+                li.onclick = () => switchTopic(index);
+                topicList.appendChild(li);
+            });
+        }
+
+        // Memuat topik
+        function loadTopic(index) {
+            const topic = topics[index];
+            
+            document.getElementById('topicTitle').textContent = topic.title;
+            document.getElementById('topicDescription').textContent = topic.description;
+            document.getElementById('codeBlock').textContent = topic.code;
+            document.getElementById('outputBlock').textContent = topic.output;
+            document.getElementById('topicIndicator').textContent = `Topik ${index + 1} dari ${topics.length}`;
+            
+            // Update active class di sidebar
+            document.querySelectorAll('.topic-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            applySyntaxHighlighting();
+        }
+
+        // Pindah ke topik sebelumnya
+        function prevTopic() {
+            if (currentTopic > 0) {
+                currentTopic--;
+                loadTopic(currentTopic);
+                updateNavigation();
+                hideOutput();
+            }
+        }
+
+        // Pindah ke topik selanjutnya
+        function nextTopic() {
+            if (currentTopic < topics.length - 1) {
+                currentTopic++;
+                loadTopic(currentTopic);
+                updateNavigation();
+                hideOutput();
+            }
+        }
+
+        // Pindah ke topik tertentu
+        function switchTopic(index) {
+            currentTopic = index;
+            loadTopic(currentTopic);
+            updateNavigation();
+            hideOutput();
+        }
+
+        // Update status navigasi
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentTopic === 0;
+            document.getElementById('nextBtn').disabled = currentTopic === topics.length - 1;
+        }
+
+        // Toggle tampilan output
+        function toggleOutput() {
+            showOutput = !showOutput;
+            const outputContainer = document.getElementById('outputContainer');
+            const toggleBtn = document.getElementById('toggleOutput');
+            
+            if (showOutput) {
+                outputContainer.classList.add('show');
+                toggleBtn.textContent = 'Sembunyikan Output';
+            } else {
+                outputContainer.classList.remove('show');
+                toggleBtn.textContent = 'Tampilkan Output';
+            }
+        }
+
+        // Sembunyikan output
+        function hideOutput() {
+            showOutput = false;
+            document.getElementById('outputContainer').classList.remove('show');
+            document.getElementById('toggleOutput').textContent = 'Tampilkan Output';
+        }
+
+        // Salin kode ke clipboard
+        function copyCode() {
+            const code = topics[currentTopic].code;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Tersalin!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Syntax highlighting sederhana
+        function applySyntaxHighlighting() {
+            const codeBlock = document.getElementById('codeBlock');
+            let code = codeBlock.textContent;
+            
+            // Highlight keywords
+            const keywords = ['if', 'else', 'elif', 'for', 'while', 'in', 'and', 'or', 'not', 'True', 'False', 'print', 'range', 'type'];
+            keywords.forEach(keyword => {
+                const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                code = code.replace(regex, `<span class="keyword">${keyword}</span>`);
+            });
+            
+            // Highlight strings
+            code = code.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, '<span class="string">$&</span>');
+            
+            // Highlight numbers
+            code = code.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+            
+            // Highlight comments
+            code = code.replace(/#.*$/gm, '<span class="comment">$&</span>');
+            
+            // Highlight functions
+            code = code.replace(/(\w+)\(/g, '<span class="function">$1</span>(');
+            
+            codeBlock.innerHTML = code;
+        }
+
+        // Jalankan aplikasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
